@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pulse — AI Engineering Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #07070D;
+    --bg-card:   #0F0F1A;
+    --bg-card2:  #13131F;
+    --border:    rgba(255,255,255,0.07);
+    --border-glow: rgba(109,77,255,0.35);
+    --txt:       #FFFFFF;
+    --txt-muted: #7B7B96;
+    --txt-dim:   #4A4A62;
+    --accent:    #6D4DFF;
+    --accent2:   #9D7DFF;
+    --green:     #0EC97F;
+    --yellow:    #F5A623;
+    --red:       #FF4D6A;
+    --font-head: 'Syne', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--txt);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6;
+  }
+
+  /* ── GLOW ORBS ── */
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .orb-1 { width: 600px; height: 600px; background: rgba(109,77,255,0.12); top: -200px; left: -100px; }
+  .orb-2 { width: 400px; height: 400px; background: rgba(14,201,127,0.07); top: 300px; right: -100px; }
+  .orb-3 { width: 500px; height: 500px; background: rgba(109,77,255,0.08); top: 900px; right: 200px; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 64px;
+    height: 68px;
+    background: rgba(7,7,13,0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 0.5px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: var(--font-head);
+    font-weight: 800;
+    font-size: 22px;
+    letter-spacing: -0.5px;
+    color: var(--txt);
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .nav-logo-dot {
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.7); }
+  }
+
+  .nav-links { display: flex; align-items: center; gap: 32px; }
+
+  .nav-links a {
+    color: var(--txt-muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 400;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--txt); }
+
+  .nav-cta {
+    background: var(--accent);
+    color: #fff !important;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 500 !important;
+    font-size: 14px !important;
+    transition: background 0.2s, transform 0.15s !important;
+  }
+  .nav-cta:hover { background: var(--accent2) !important; transform: translateY(-1px); }
+
+  /* ── SECTIONS ── */
+  section { position: relative; z-index: 1; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 120px 24px 80px;
+    overflow: hidden;
+  }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(109,77,255,0.12);
+    border: 0.5px solid rgba(109,77,255,0.4);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 13px;
+    color: var(--accent2);
+    font-weight: 500;
+    margin-bottom: 32px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .hero-badge-dot {
+    width: 6px; height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: pulse-dot 1.5s ease-in-out infinite;
+  }
+
+  h1 {
+    font-family: var(--font-head);
+    font-size: clamp(42px, 6vw, 76px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -2px;
+    max-width: 900px;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+
+  h1 .accent-word {
+    background: linear-gradient(135deg, #9D7DFF, #6D4DFF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: clamp(16px, 2vw, 20px);
+    color: var(--txt-muted);
+    max-width: 560px;
+    margin: 24px auto 0;
+    line-height: 1.7;
+    font-weight: 300;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+
+  .hero-actions {
+    display: flex; align-items: center; gap: 16px;
+    margin-top: 40px;
+    animation: fadeUp 0.6s 0.3s ease both;
+  }
+
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--accent);
+    color: #fff;
+    padding: 14px 28px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 0 0 0 rgba(109,77,255,0.4);
+  }
+  .btn-primary:hover {
+    background: var(--accent2);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(109,77,255,0.3);
+  }
+
+  .btn-ghost {
+    display: inline-flex; align-items: center; gap: 8px;
+    color: var(--txt-muted);
+    padding: 14px 24px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 400;
+    text-decoration: none;
+    border: 0.5px solid var(--border);
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .btn-ghost:hover { color: var(--txt); border-color: rgba(255,255,255,0.2); }
+
+  .hero-note {
+    margin-top: 16px;
+    font-size: 13px;
+    color: var(--txt-dim);
+    animation: fadeUp 0.6s 0.4s ease both;
+  }
+
+  /* ── SCORE CARD ── */
+  .score-card-wrap {
+    margin-top: 72px;
+    width: 100%;
+    max-width: 860px;
+    animation: fadeUp 0.8s 0.5s ease both;
+  }
+
+  .score-card {
+    background: var(--bg-card);
+    border: 0.5px solid var(--border-glow);
+    border-radius: 20px;
+    padding: 32px;
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 32px;
+    align-items: center;
+    box-shadow: 0 0 60px rgba(109,77,255,0.08), inset 0 0 0 0.5px rgba(255,255,255,0.04);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .score-card::before {
+    content: '';
+    position: absolute;
+    top: -1px; left: 32px; right: 32px; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(109,77,255,0.6), transparent);
+  }
+
+  .score-main {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 8px;
+    padding-right: 32px;
+    border-right: 0.5px solid var(--border);
+  }
+
+  .score-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--txt-dim);
+  }
+
+  .score-number {
+    font-family: var(--font-head);
+    font-size: 80px;
+    font-weight: 800;
+    line-height: 1;
+    background: linear-gradient(135deg, #fff 40%, var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .score-max { font-size: 20px; color: var(--txt-dim); font-weight: 300; }
+
+  .score-tag {
+    font-size: 12px;
+    background: rgba(245,166,35,0.15);
+    color: var(--yellow);
+    border: 0.5px solid rgba(245,166,35,0.3);
+    padding: 3px 12px;
+    border-radius: 100px;
+    font-weight: 500;
+  }
+
+  .score-dims { display: flex; flex-direction: column; gap: 14px; }
+
+  .dim-row { display: flex; flex-direction: column; gap: 6px; }
+
+  .dim-meta {
+    display: flex; justify-content: space-between; align-items: center;
+  }
+
+  .dim-name {
+    font-size: 13px;
+    color: var(--txt-muted);
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .dim-dot {
+    width: 7px; height: 7px; border-radius: 50;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .dim-val { font-size: 13px; font-weight: 500; color: var(--txt); }
+
+  .bar-track {
+    height: 4px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 100px;
+    transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* ── SECTION TITLE ── */
+  .section-title {
+    font-family: var(--font-head);
+    font-size: clamp(32px, 4vw, 48px);
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    line-height: 1.1;
+  }
+
+  .section-sub {
+    font-size: 18px;
+    color: var(--txt-muted);
+    font-weight: 300;
+    line-height: 1.7;
+    max-width: 540px;
+  }
+
+  /* ── PAIN SECTION ── */
+  .pain {
+    padding: 120px 64px;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .pain-left { display: flex; flex-direction: column; gap: 24px; }
+
+  .overline {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent2);
+  }
+
+  .tool-chaos {
+    display: flex; flex-direction: column; gap: 12px;
+    margin-top: 8px;
+  }
+
+  .tool-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 16px;
+    background: var(--bg-card);
+    border: 0.5px solid var(--border);
+    border-radius: 10px;
+    font-size: 14px;
+  }
+
+  .tool-icon {
+    width: 32px; height: 32px;
+    background: var(--bg-card2);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .tool-name { font-weight: 500; flex: 1; }
+
+  .tool-cost {
+    font-size: 12px;
+    color: var(--txt-dim);
+    font-family: monospace;
+  }
+
+  .tool-status {
+    font-size: 11px;
+    padding: 2px 10px;
+    border-radius: 100px;
+  }
+
+  .status-disconnected {
+    background: rgba(255,77,106,0.1);
+    color: var(--red);
+    border: 0.5px solid rgba(255,77,106,0.25);
+  }
+
+  .status-blind {
+    background: rgba(245,166,35,0.1);
+    color: var(--yellow);
+    border: 0.5px solid rgba(245,166,35,0.25);
+  }
+
+  /* ── FEATURES ── */
+  .features {
+    padding: 120px 64px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .features-header {
+    text-align: center;
+    display: flex; flex-direction: column; align-items: center; gap: 16px;
+    margin-bottom: 72px;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 0.5px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .feature-card {
+    background: var(--bg-card);
+    padding: 36px 32px;
+    display: flex; flex-direction: column; gap: 16px;
+    transition: background 0.2s;
+  }
+  .feature-card:hover { background: var(--bg-card2); }
+
+  .feature-icon {
+    width: 44px; height: 44px;
+    background: rgba(109,77,255,0.1);
+    border: 0.5px solid rgba(109,77,255,0.3);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+
+  .feature-title {
+    font-family: var(--font-head);
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+
+  .feature-desc {
+    font-size: 14px;
+    color: var(--txt-muted);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* ── BRIEF SECTION ── */
+  .brief-section {
+    padding: 120px 64px;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .brief-card {
+    background: var(--bg-card);
+    border: 0.5px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .brief-header {
+    padding: 16px 20px;
+    border-bottom: 0.5px solid var(--border);
+    display: flex; align-items: center; gap: 10px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .brief-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+
+  .brief-body { padding: 24px; font-size: 13px; line-height: 1.8; }
+
+  .brief-week {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--txt-dim);
+    margin-bottom: 16px;
+  }
+
+  .brief-score-line {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .brief-score-num {
+    font-family: var(--font-head);
+    font-size: 28px;
+    font-weight: 800;
+  }
+
+  .brief-badge {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 100px;
+    background: rgba(245,166,35,0.12);
+    color: var(--yellow);
+    border: 0.5px solid rgba(245,166,35,0.3);
+  }
+
+  .brief-section-title {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--txt-dim);
+    margin: 16px 0 10px;
+  }
+
+  .brief-item {
+    display: flex; gap: 10px; align-items: flex-start;
+    margin-bottom: 8px;
+    font-size: 13px;
+    color: var(--txt-muted);
+  }
+
+  .brief-item-dot { flex-shrink: 0; margin-top: 6px; width: 5px; height: 5px; border-radius: 50%; }
+
+  /* ── INTEGRATIONS ── */
+  .integrations {
+    padding: 80px 64px;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .int-label {
+    font-size: 13px;
+    color: var(--txt-dim);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+
+  .int-logos {
+    display: flex; justify-content: center; align-items: center;
+    gap: 12px; flex-wrap: wrap;
+  }
+
+  .int-chip {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 20px;
+    background: var(--bg-card);
+    border: 0.5px solid var(--border);
+    border-radius: 100px;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--txt-muted);
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .int-chip:hover { border-color: rgba(109,77,255,0.4); color: var(--txt); }
+
+  .int-chip-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  /* ── PRICING ── */
+  .pricing {
+    padding: 120px 64px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .pricing-header {
+    text-align: center;
+    display: flex; flex-direction: column; align-items: center; gap: 16px;
+    margin-bottom: 64px;
+  }
+
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    align-items: start;
+  }
+
+  .pricing-card {
+    background: var(--bg-card);
+    border: 0.5px solid var(--border);
+    border-radius: 16px;
+    padding: 32px 28px;
+    display: flex; flex-direction: column; gap: 20px;
+  }
+
+  .pricing-card.featured {
+    border-color: var(--border-glow);
+    background: linear-gradient(160deg, rgba(109,77,255,0.08), var(--bg-card));
+    position: relative;
+  }
+
+  .pricing-card.featured::before {
+    content: 'Most Popular';
+    position: absolute;
+    top: -13px; left: 50%; transform: translateX(-50%);
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding: 4px 14px;
+    border-radius: 100px;
+    white-space: nowrap;
+  }
+
+  .plan-name { font-size: 12px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: var(--txt-dim); }
+
+  .plan-price {
+    display: flex; align-items: baseline; gap: 4px;
+  }
+
+  .plan-price-num {
+    font-family: var(--font-head);
+    font-size: 40px;
+    font-weight: 800;
+    letter-spacing: -1px;
+  }
+
+  .plan-price-period { font-size: 14px; color: var(--txt-muted); }
+
+  .plan-desc { font-size: 14px; color: var(--txt-muted); line-height: 1.6; }
+
+  .plan-divider { height: 0.5px; background: var(--border); }
+
+  .plan-features { display: flex; flex-direction: column; gap: 12px; }
+
+  .plan-feature {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 14px; color: var(--txt-muted);
+  }
+
+  .plan-check { color: var(--green); font-size: 16px; flex-shrink: 0; }
+  .plan-cross { color: var(--txt-dim); font-size: 16px; flex-shrink: 0; }
+
+  .btn-plan-primary {
+    display: block; text-align: center;
+    background: var(--accent);
+    color: #fff;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .btn-plan-primary:hover { background: var(--accent2); }
+
+  .btn-plan-ghost {
+    display: block; text-align: center;
+    background: transparent;
+    color: var(--txt-muted);
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 400;
+    text-decoration: none;
+    border: 0.5px solid var(--border);
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-plan-ghost:hover { border-color: rgba(255,255,255,0.2); color: var(--txt); }
+
+  /* ── CTA FOOTER ── */
+  .cta-section {
+    padding: 120px 64px;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+    display: flex; flex-direction: column; align-items: center; gap: 24px;
+  }
+
+  .cta-section h2 {
+    font-family: var(--font-head);
+    font-size: clamp(36px, 5vw, 60px);
+    font-weight: 800;
+    letter-spacing: -2px;
+    line-height: 1.05;
+  }
+
+  footer {
+    border-top: 0.5px solid var(--border);
+    padding: 32px 64px;
+    display: flex; justify-content: space-between; align-items: center;
+    position: relative; z-index: 1;
+  }
+
+  .footer-logo {
+    font-family: var(--font-head);
+    font-weight: 800;
+    font-size: 18px;
+    color: var(--txt-muted);
+    display: flex; align-items: center; gap: 6px;
+  }
+
+  .footer-note { font-size: 13px; color: var(--txt-dim); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-up { animation: fadeUp 0.7s ease both; }
+
+  /* ── GRID LINES BG ── */
+  .grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 64px 64px;
+    pointer-events: none;
+  }
+
+  @media (max-width: 900px) {
+    nav { padding: 0 24px; }
+    .pain, .brief-section { grid-template-columns: 1fr; padding: 60px 24px; }
+    .features { padding: 60px 24px; }
+    .features-grid { grid-template-columns: 1fr; }
+    .pricing { padding: 60px 24px; }
+    .pricing-grid { grid-template-columns: 1fr; }
+    .score-card { grid-template-columns: 1fr; }
+    .score-main { border-right: none; border-bottom: 0.5px solid var(--border); padding-right: 0; padding-bottom: 24px; }
+    footer { flex-direction: column; gap: 12px; text-align: center; padding: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-dot"></div>
+    PULSE
+  </div>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#brief">Monday Brief</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#" class="nav-cta">Get Started Free</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="grid-bg"></div>
+
+  <div class="hero-badge">
+    <div class="hero-badge-dot"></div>
+    AI Engineering Intelligence — Built for Startup CTOs
+  </div>
+
+  <h1>Know exactly what's<br><span class="accent-word">slowing your team</span> down.</h1>
+
+  <p class="hero-sub">
+    Connect GitHub &amp; Jira in 5 minutes. Get an AI-powered engineering health score and actionable insights every Monday morning.
+  </p>
+
+  <div class="hero-actions">
+    <a href="#" class="btn-primary">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12Z"/></svg>
+      Connect GitHub — it's free
+    </a>
+    <a href="#features" class="btn-ghost">See how it works →</a>
+  </div>
+
+  <p class="hero-note">No credit card required · Free for teams up to 5 engineers</p>
+
+  <!-- HERO SCORE CARD -->
+  <div class="score-card-wrap">
+    <div class="score-card">
+      <div class="score-main">
+        <div class="score-label">Health Score</div>
+        <div>
+          <span class="score-number" id="scoreNum">74</span>
+          <span class="score-max">/100</span>
+        </div>
+        <div class="score-tag">⚠ Watch Closely</div>
+      </div>
+
+      <div class="score-dims">
+        <div class="dim-row">
+          <div class="dim-meta">
+            <div class="dim-name"><div class="dim-dot" style="background:#0EC97F"></div>Velocity</div>
+            <div class="dim-val">82</div>
+          </div>
+          <div class="bar-track"><div class="bar-fill" style="width:82%; background:#0EC97F"></div></div>
+        </div>
+        <div class="dim-row">
+          <div class="dim-meta">
+            <div class="dim-name"><div class="dim-dot" style="background:#0EC97F"></div>Reliability</div>
+            <div class="dim-val">79</div>
+          </div>
+          <div class="bar-track"><div class="bar-fill" style="width:79%; background:#0EC97F"></div></div>
+        </div>
+        <div class="dim-row">
+          <div class="dim-meta">
+            <div class="dim-name"><div class="dim-dot" style="background:#F5A623"></div>Quality</div>
+            <div class="dim-val">71</div>
+          </div>
+          <div class="bar-track"><div class="bar-fill" style="width:71%; background:#F5A623"></div></div>
+        </div>
+        <div class="dim-row">
+          <div class="dim-meta">
+            <div class="dim-name"><div class="dim-dot" style="background:#F5A623"></div>Collaboration</div>
+            <div class="dim-val">68</div>
+          </div>
+          <div class="bar-track"><div class="bar-fill" style="width:68%; background:#F5A623"></div></div>
+        </div>
+        <div class="dim-row">
+          <div class="dim-meta">
+            <div class="dim-name"><div class="dim-dot" style="background:#FF4D6A"></div>Burnout Risk</div>
+            <div class="dim-val">43</div>
+          </div>
+          <div class="bar-track"><div class="bar-fill" style="width:43%; background:#FF4D6A"></div></div>
+        </div>
+        <div class="dim-row">
+          <div class="dim-meta">
+            <div class="dim-name"><div class="dim-dot" style="background:#6D4DFF"></div>Predictability</div>
+            <div class="dim-val">75</div>
+          </div>
+          <div class="bar-track"><div class="bar-fill" style="width:75%; background:#6D4DFF"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INTEGRATIONS -->
+<div class="integrations">
+  <div class="int-label">Connects with your entire stack</div>
+  <div class="int-logos">
+    <div class="int-chip"><div class="int-chip-dot" style="background:#fff"></div>GitHub</div>
+    <div class="int-chip"><div class="int-chip-dot" style="background:#0052CC"></div>Jira</div>
+    <div class="int-chip"><div class="int-chip-dot" style="background:#4A154B"></div>Slack</div>
+    <div class="int-chip"><div class="int-chip-dot" style="background:#5865F2"></div>Linear</div>
+    <div class="int-chip"><div class="int-chip-dot" style="background:#F05030"></div>GitLab</div>
+    <div class="int-chip"><div class="int-chip-dot" style="background:#632CA6"></div>PagerDuty</div>
+    <div class="int-chip"><div class="int-chip-dot" style="background:#632CA6"></div>Datadog</div>
+    <div class="int-chip"><div class="int-chip-dot" style="background:#F5A623"></div>Jenkins</div>
+  </div>
+</div>
+
+<!-- PAIN SECTION -->
+<section>
+  <div class="pain">
+    <div class="pain-left">
+      <div class="overline">The Problem</div>
+      <h2 class="section-title">6 tools. Zero clarity.</h2>
+      <p class="section-sub">You're paying thousands per month for tools that don't talk to each other. Nobody tells you what actually matters.</p>
+    </div>
+    <div class="tool-chaos">
+      <div class="tool-row">
+        <div class="tool-icon">🐙</div>
+        <div class="tool-name">GitHub</div>
+        <div class="tool-cost">$21/mo</div>
+        <div class="tool-status status-blind">No insight</div>
+      </div>
+      <div class="tool-row">
+        <div class="tool-icon">📋</div>
+        <div class="tool-name">Jira</div>
+        <div class="tool-cost">$8.15/user</div>
+        <div class="tool-status status-blind">No insight</div>
+      </div>
+      <div class="tool-row">
+        <div class="tool-icon">💬</div>
+        <div class="tool-name">Slack</div>
+        <div class="tool-cost">$7.25/user</div>
+        <div class="tool-status status-blind">No insight</div>
+      </div>
+      <div class="tool-row">
+        <div class="tool-icon">📡</div>
+        <div class="tool-name">Datadog</div>
+        <div class="tool-cost">$23/host</div>
+        <div class="tool-status status-disconnected">Siloed</div>
+      </div>
+      <div class="tool-row" style="border-color: rgba(109,77,255,0.35); background: rgba(109,77,255,0.04);">
+        <div class="tool-icon" style="background: rgba(109,77,255,0.15);">⚡</div>
+        <div class="tool-name" style="color:#9D7DFF; font-weight:600;">Pulse</div>
+        <div class="tool-cost" style="color:#6D4DFF">$49/mo</div>
+        <div class="tool-status" style="background:rgba(109,77,255,0.12); color:#9D7DFF; border:0.5px solid rgba(109,77,255,0.3)">Full clarity</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="features">
+    <div class="features-header">
+      <div class="overline">What Pulse Does</div>
+      <h2 class="section-title">Your AI CTO assistant</h2>
+      <p class="section-sub">Pulse analyzes every signal from your dev stack and tells you exactly what to fix — before it becomes a crisis.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🏥</div>
+        <div class="feature-title">Engineering Health Score</div>
+        <div class="feature-desc">A single 0–100 score updated weekly across 6 dimensions: velocity, quality, reliability, collaboration, burnout risk, and predictability.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔍</div>
+        <div class="feature-title">Bottleneck Detection</div>
+        <div class="feature-desc">Identifies exactly which engineer, service, or process is slowing your team down — with specific, actionable recommendations.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔮</div>
+        <div class="feature-title">Sprint Predictions</div>
+        <div class="feature-desc">Predicts sprint completion probability based on historical velocity. Know by Wednesday if Friday's deadline is at risk.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🚨</div>
+        <div class="feature-title">Burnout Signals</div>
+        <div class="feature-desc">Detects multi-signal burnout risk per engineer — after-hours commits, on-call load, review drop-off — before it becomes attrition.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <div class="feature-title">DORA Metrics</div>
+        <div class="feature-desc">Track all 4 DORA metrics automatically: deployment frequency, lead time, change failure rate, and MTTR. Benchmarked against industry data.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🤖</div>
+        <div class="feature-title">AI Brief Generator</div>
+        <div class="feature-desc">Every Monday at 7 AM, Pulse sends a human-readable AI brief to Slack. What broke, why, who's at risk, what to do this week.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MONDAY BRIEF -->
+<section id="brief">
+  <div class="brief-section">
+    <div>
+      <div class="overline">Monday Morning Brief</div>
+      <h2 class="section-title" style="margin: 16px 0;">Your AI CTO reads your team so you don't have to.</h2>
+      <p class="section-sub">Every Monday at 7 AM, Pulse delivers a plain-English brief to your Slack. No dashboards to open. No data to interpret. Just: here's what happened, here's what matters, here's what to do.</p>
+      <div style="margin-top:32px">
+        <a href="#" class="btn-primary" style="display:inline-flex">See a sample brief →</a>
+      </div>
+    </div>
+    <div class="brief-card">
+      <div class="brief-header">
+        <div class="brief-dot"></div>
+        Pulse · Monday Brief · Delivered to Slack
+      </div>
+      <div class="brief-body">
+        <div class="brief-week">WEEK OF MAY 19, 2025</div>
+        <div class="brief-score-line">
+          <span class="brief-score-num">71</span>
+          <span style="font-size:20px; color:var(--txt-muted); font-weight:300">/100</span>
+          <span class="brief-badge">↓ -3 from last week</span>
+        </div>
+        <div class="brief-section-title">🔴 Needs Attention</div>
+        <div class="brief-item"><div class="brief-item-dot" style="background:var(--red)"></div><span>Auth service had 3 incidents — same Kafka consumer timeout each time. Root cause unresolved.</span></div>
+        <div class="brief-item"><div class="brief-item-dot" style="background:var(--red)"></div><span>Priya's PR review rate dropped 80% this week. Potential burnout signal — check in.</span></div>
+        <div class="brief-item"><div class="brief-item-dot" style="background:var(--red)"></div><span>Sprint 22 closed at 61% completion. 3rd consecutive miss.</span></div>
+        <div class="brief-section-title">🟡 Watch Closely</div>
+        <div class="brief-item"><div class="brief-item-dot" style="background:var(--yellow)"></div><span>Build time up 34% — new Docker layer in payments-service. Not critical yet.</span></div>
+        <div class="brief-item"><div class="brief-item-dot" style="background:var(--yellow)"></div><span>2 tickets marked done were reopened within 48 hours.</span></div>
+        <div class="brief-section-title">✅ AI Recommendation</div>
+        <div class="brief-item"><div class="brief-item-dot" style="background:var(--green)"></div><span>Assign one engineer to fix the Kafka retry policy before Sprint 23 starts.</span></div>
+        <div class="brief-item"><div class="brief-item-dot" style="background:var(--green)"></div><span>Schedule a retro specifically on estimation accuracy this week.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="pricing">
+    <div class="pricing-header">
+      <div class="overline">Pricing</div>
+      <h2 class="section-title">Simple, honest pricing.</h2>
+      <p class="section-sub">Start free. Upgrade when Pulse saves your sprint.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div>
+          <div class="plan-name">Starter</div>
+          <div class="plan-price">
+            <span class="plan-price-num">$0</span>
+            <span class="plan-price-period">/month</span>
+          </div>
+          <div class="plan-desc">For small teams getting started with engineering visibility.</div>
+        </div>
+        <div class="plan-divider"></div>
+        <div class="plan-features">
+          <div class="plan-feature"><span class="plan-check">✓</span>1 repository</div>
+          <div class="plan-feature"><span class="plan-check">✓</span>Up to 5 engineers</div>
+          <div class="plan-feature"><span class="plan-check">✓</span>Basic health score</div>
+          <div class="plan-feature"><span class="plan-check">✓</span>GitHub integration</div>
+          <div class="plan-feature"><span class="plan-cross">✗</span>Monday AI Brief</div>
+          <div class="plan-feature"><span class="plan-cross">✗</span>Burnout signals</div>
+        </div>
+        <a href="#" class="btn-plan-ghost">Get started free</a>
+      </div>
+
+      <div class="pricing-card featured">
+        <div>
+          <div class="plan-name">Pro</div>
+          <div class="plan-price">
+            <span class="plan-price-num">$49</span>
+            <span class="plan-price-period">/month</span>
+          </div>
+          <div class="plan-desc">For growing startups who want full engineering clarity.</div>
+        </div>
+        <div class="plan-divider"></div>
+        <div class="plan-features">
+          <div class="plan-feature"><span class="plan-check">✓</span>Unlimited repositories</div>
+          <div class="plan-feature"><span class="plan-check">✓</span>Up to 25 engineers</div>
+          <div class="plan-feature"><span class="plan-check">✓</span>Full health score (6 dims)</div>
+          <div class="plan-feature"><span class="plan-check">✓</span>Monday AI Brief → Slack</div>
+          <div class="plan-feature"><span class="plan-check">✓</span>DORA metrics</div>
+          <div class="plan-feature"><span class="plan-cross">✗</span>Burnout signals</div>
+        </div>
+        <a href="#" class="btn-plan-primary">Start Pro trial</a>
+      </div>
+
+      <div class="pricing-card">
+        <div>
+          <div class="plan-name">Team</div>
+          <div class="plan-price">
+            <span class="plan-price-num">$149</span>
+            <span class="plan-price-period">/month</span>
+          </div>
+          <div class="plan-desc">For teams that treat engineering health as a competitive advantage.</div>
+        </div>
+        <div class="plan-divider"></div>
+        <div class="plan-features">
+          <div class="plan-feature"><span class="plan-check">✓</span>Everything in Pro</div>
+          <div class="plan-feature"><span class="plan-check">✓</span>Unlimited engineers</div>
+          <div class="plan-feature"><span class="plan-check">✓</span>Burnout risk signals</div>
+          <div class="plan-feature"><span class="plan-check">✓</span>Sprint predictions</div>
+          <div class="plan-feature"><span class="plan-check">✓</span>Slack + CI/CD integrations</div>
+          <div class="plan-feature"><span class="plan-check">✓</span>Priority support</div>
+        </div>
+        <a href="#" class="btn-plan-ghost">Contact us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section>
+  <div class="cta-section">
+    <div class="overline">Get Started Today</div>
+    <h2>Your team deserves<br><span style="background:linear-gradient(135deg,#9D7DFF,#6D4DFF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">better intelligence.</span></h2>
+    <p class="section-sub" style="text-align:center">Connect GitHub in 5 minutes. See your first health score today. No sales call. No credit card.</p>
+    <div class="hero-actions">
+      <a href="#" class="btn-primary">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12Z"/></svg>
+        Connect GitHub — it's free
+      </a>
+    </div>
+    <p style="font-size:13px; color:var(--txt-dim)">Already used by engineers building in public 🚀</p>
+  </div>
+</section>
+
+<!-- CONTACT SECTION -->
+<section style="position:relative; z-index:1; border-top: 0.5px solid var(--border);">
+  <div style="max-width:900px; margin:0 auto; padding:80px 64px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:20px;">
+    <div style="width:40px; height:40px; border-radius:50%; background:rgba(109,77,255,0.12); border:0.5px solid rgba(109,77,255,0.3); display:flex; align-items:center; justify-content:center; font-size:18px;">✉</div>
+    <h3 style="font-family:var(--font-head); font-size:clamp(24px,3vw,36px); font-weight:800; letter-spacing:-1px; line-height:1.1;">
+      Got a suggestion? Want to connect?<br>
+      <span style="background:linear-gradient(135deg,#9D7DFF,#6D4DFF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">We reply to everyone. Always.</span>
+    </h3>
+    <p style="font-size:16px; color:var(--txt-muted); max-width:460px; line-height:1.7; font-weight:300;">
+      Whether it's feedback, a feature idea, a bug you spotted, or just wanting to say hi — drop us a line. Real humans read every message.
+    </p>
+    <a id="contact-link" href="#" onclick="revealEmail(event)" style="display:inline-flex; align-items:center; gap:10px; background:var(--bg-card); border:0.5px solid var(--border-glow); color:var(--accent2); padding:12px 24px; border-radius:10px; font-size:15px; font-weight:500; text-decoration:none; transition:background 0.2s, border-color 0.2s; margin-top:4px;">
+      <span id="contact-label">Contact us →</span>
+    </a>
+    <p style="font-size:12px; color:var(--txt-dim);">Usually reply within 24 hours · No spam, ever</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">
+    <div style="width:8px;height:8px;border-radius:50%;background:#6D4DFF"></div>
+    PULSE
+  </div>
+  <div class="footer-note">Built in public by a backend engineer who got tired of flying blind.</div>
+  <div class="footer-note">© 2025 Pulse</div>
+</footer>
+
+<script>
+  // Animate score bars on load
+  window.addEventListener('load', () => {
+    document.querySelectorAll('.bar-fill').forEach(bar => {
+      const w = bar.style.width;
+      bar.style.width = '0%';
+      setTimeout(() => { bar.style.width = w; }, 300);
+    });
+  });
+
+  // Email obfuscation — split so scrapers can't read it
+  const _e = ['mahek', '01001', '@', 'gmail', '.', 'com'];
+  function revealEmail(evt) {
+    evt.preventDefault();
+    const link = document.getElementById('contact-link');
+    const label = document.getElementById('contact-label');
+    const email = _e.join('');
+    link.href = 'mailto:' + email;
+    label.textContent = email;
+    link.style.letterSpacing = '0.2px';
+    setTimeout(() => { window.location.href = 'mailto:' + email; }, 80);
+  }
+
+  // Animate score number counting up
+  const scoreEl = document.getElementById('scoreNum');
+  let count = 0;
+  const target = 74;
+  const interval = setInterval(() => {
+    count += 2;
+    if (count >= target) { count = target; clearInterval(interval); }
+    scoreEl.textContent = count;
+  }, 20);
+</script>
+</body>
+</html>
